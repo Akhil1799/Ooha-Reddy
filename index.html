@@ -1,29 +1,175 @@
-<div class="musicBar">
-  <button id="musicBtn" class="btn">▶ Play Music</button>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday Ooha 🎉</title>
 
-<audio id="bgMusic" loop preload="auto">
-  <source src="./sang-Rahiyo.mp3" type="audio/mpeg" />
-</audio>
-
-<script>
-  const music = document.getElementById('bgMusic');
-  const btn = document.getElementById('musicBtn');
-  let playing = false;
-
-  btn.addEventListener('click', async () => {
-    try{
-      if(!playing){
-        await music.play();
-        playing = true;
-        btn.textContent = '⏸ Pause Music';
-      }else{
-        music.pause();
-        playing = false;
-        btn.textContent = '▶ Play Music';
-      }
-    }catch(e){
-      alert("Couldn’t play audio. Try hard refresh (Cmd+Shift+R) and click Play again.");
+  <style>
+    :root{
+      --bg1:#070A12;
+      --bg2:#111A2B;
+      --gold:#D8B15A;
+      --cream:#F5F0E6;
+      --accent:#FF4B5C;
     }
-  });
-</script>
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      color:var(--cream);
+    }
+
+    .card{
+      width:90%;
+      max-width:950px;
+      padding:40px;
+      border-radius:22px;
+      background: rgba(255,255,255,0.05);
+      border:1px solid rgba(216,177,90,0.35);
+      box-shadow: 0 20px 55px rgba(0,0,0,0.55);
+    }
+
+    h1{
+      margin-top:0;
+      font-size:42px;
+    }
+
+    .gold{ color: var(--gold); }
+
+    .layout{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:20px;
+      align-items:center;
+    }
+
+    .message{
+      border:1px dashed rgba(216,177,90,0.45);
+      padding:18px;
+      border-radius:16px;
+    }
+
+    .btn{
+      margin-top:15px;
+      border:1px solid rgba(216,177,90,0.45);
+      background:black;
+      color:white;
+      padding:10px 18px;
+      border-radius:999px;
+      cursor:pointer;
+    }
+
+    .art{
+      position:relative;
+      height:320px;
+    }
+
+    .balloon{
+      position:absolute;
+      width:70px;
+      height:90px;
+      border-radius:50%;
+      opacity:0.7;
+    }
+
+    .b1{background:#D8B15A; left:10px; top:40px;}
+    .b2{background:#FF4B5C; right:10px; top:20px;}
+    .b3{background:#5AC8FA; left:120px; top:0;}
+
+    svg{
+      width:100%;
+      max-width:280px;
+      display:block;
+      margin:auto;
+      position:relative;
+      z-index:2;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <h1>Happy Birthday, <span class="gold">Ooha</span> 🎂</h1>
+
+    <div class="layout">
+      <div>
+        <div class="message">
+          <h3>Your message goes here</h3>
+          <p>Add your birthday message ✨</p>
+        </div>
+
+        <button id="musicBtn" class="btn">▶ Play Music</button>
+
+        <!-- CORRECT FILE NAME -->
+        <audio id="bgMusic" loop preload="auto">
+          <source src="./sang-Rahiyo.mp3" type="audio/mpeg" />
+        </audio>
+      </div>
+
+      <div class="art">
+        <div class="balloon b1"></div>
+        <div class="balloon b2"></div>
+        <div class="balloon b3"></div>
+
+        <!-- Cute Penguin -->
+        <svg viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="210" cy="392" rx="125" ry="22" fill="rgba(0,0,0,0.35)"/>
+
+          <ellipse cx="210" cy="250" rx="122" ry="152" fill="#0C0F18"/>
+          <ellipse cx="210" cy="270" rx="84" ry="120" fill="#F5F0E6"/>
+
+          <ellipse cx="210" cy="154" rx="92" ry="86" fill="#0C0F18"/>
+          <ellipse cx="210" cy="162" rx="66" ry="58" fill="#F5F0E6"/>
+
+          <circle cx="186" cy="148" r="10" fill="#111A2B"/>
+          <circle cx="234" cy="148" r="10" fill="#111A2B"/>
+
+          <path d="M210 160 L192 176 Q210 192 228 176 Z" fill="#F2A83B"/>
+
+          <!-- Smile -->
+          <path d="M194 188 Q210 200 226 188" stroke="#111A2B" stroke-width="4" fill="none"/>
+
+          <!-- Flowers -->
+          <circle cx="210" cy="300" r="10" fill="#FF4B5C"/>
+          <circle cx="225" cy="290" r="10" fill="#5AC8FA"/>
+          <circle cx="195" cy="290" r="10" fill="#D8B15A"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const music = document.getElementById('bgMusic');
+    const btn = document.getElementById('musicBtn');
+    let playing = false;
+
+    music.addEventListener('error', () => {
+      alert("Audio not found. File name must be sang-Rahiyo.mp3 (capital R).");
+    });
+
+    btn.addEventListener('click', async () => {
+      try{
+        if(!playing){
+          await music.play();
+          playing = true;
+          btn.textContent = "⏸ Pause Music";
+        } else {
+          music.pause();
+          playing = false;
+          btn.textContent = "▶ Play Music";
+        }
+      }catch(e){
+        alert("Click Play again or refresh page.");
+      }
+    });
+  </script>
+</body>
+</html>
