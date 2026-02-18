@@ -27,4 +27,342 @@
         radial-gradient(900px 700px at 20% 85%, rgba(255,75,92,0.08), transparent 55%),
         linear-gradient(135deg, var(--bg1), var(--bg2));
       color:var(--cream);
-      overflow:hi
+      overflow:hidden;
+      padding:22px;
+    }
+
+    .card{
+      width:min(960px, 96vw);
+      padding:34px;
+      border-radius:24px;
+      background: rgba(255,255,255,0.06);
+      border:1px solid rgba(216,177,90,0.30);
+      box-shadow: 0 20px 55px rgba(0,0,0,0.55);
+      backdrop-filter: blur(10px);
+      position:relative;
+      overflow:hidden;
+    }
+
+    h1{
+      margin:0 0 18px;
+      font-size:clamp(30px, 4.2vw, 46px);
+      letter-spacing:.2px;
+      line-height:1.05;
+    }
+    .gold{ color: var(--gold); }
+
+    .layout{
+      display:grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap:22px;
+      align-items:center;
+    }
+    @media (max-width: 860px){
+      .layout{ grid-template-columns: 1fr; }
+    }
+
+    .message{
+      border:1px dashed rgba(216,177,90,0.45);
+      padding:18px;
+      border-radius:16px;
+      background: rgba(0,0,0,0.18);
+    }
+    .message h3{
+      margin:0 0 8px;
+      color: var(--gold);
+      letter-spacing:.2px;
+    }
+    .message p{ margin:0; opacity:.92; line-height:1.55; }
+
+    /* ===== Music controls ===== */
+    .musicBar{
+      margin-top:14px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      opacity:.95;
+    }
+    .btn{
+      border:1px solid rgba(216,177,90,0.45);
+      background: rgba(0,0,0,0.25);
+      color: var(--cream);
+      padding:10px 14px;
+      border-radius:999px;
+      cursor:pointer;
+      font-weight:600;
+    }
+    .btn:hover{ transform: translateY(-1px); }
+    .note{
+      font-size:13px;
+      opacity:.8;
+    }
+
+    /* ===== Art panel ===== */
+    .art{
+      position:relative;
+      border-radius:18px;
+      padding:16px;
+      border:1px solid rgba(216,177,90,0.25);
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      overflow:hidden;
+      min-height:360px;
+    }
+
+    /* Balloons BEHIND penguin */
+    .balloons{
+      position:absolute;
+      inset:0;
+      pointer-events:none; /* allow clicks only on balloons themselves when enabled */
+      z-index:1;
+    }
+    .balloon{
+      position:absolute;
+      width:86px;
+      height:110px;
+      border-radius:50% 50% 46% 46%;
+      opacity:0.78;
+      filter: blur(.2px);
+      transform: translateY(0);
+      animation: floaty 6.5s ease-in-out infinite;
+      pointer-events:auto; /* clickable */
+      cursor:pointer;
+    }
+    .balloon:after{
+      content:"";
+      position:absolute;
+      left:50%;
+      top:110px;
+      width:2px;
+      height:130px;
+      background: rgba(245,240,230,0.35);
+      transform: translateX(-50%);
+    }
+
+    /* positions */
+    .b1{ left:6%;  top:52%; background: rgba(216,177,90,0.92); animation-delay:.1s; }
+    .b2{ left:16%; top:18%; background: rgba(255,75,92,0.88); animation-delay:1.2s; }
+    .b3{ right:14%; top:22%; background: rgba(90,220,255,0.70); animation-delay:2.1s; }
+    .b4{ right:6%;  top:56%; background: rgba(120,255,180,0.68); animation-delay:3.0s; }
+    .b5{ left:42%; top:6%;  background: rgba(170,140,255,0.65); animation-delay:2.6s; transform: scale(.88); }
+
+    @keyframes floaty{
+      0%,100%{ transform: translateY(0) rotate(-2deg); }
+      50%{ transform: translateY(-18px) rotate(2deg); }
+    }
+
+    /* Pop animation when clicked */
+    .pop{
+      animation: popBalloon .35s ease-out forwards !important;
+    }
+    @keyframes popBalloon{
+      to { transform: scale(1.35); opacity:0; }
+    }
+
+    /* Penguin SVG */
+    .penguinWrap{
+      position:relative;
+      z-index:2; /* above balloons */
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      min-height:330px;
+    }
+    svg.penguin{
+      width:100%;
+      max-width:360px;
+      filter: drop-shadow(0 18px 28px rgba(0,0,0,0.45));
+    }
+
+    /* Sparkles */
+    .sparkle{
+      position:absolute;
+      width:6px;height:6px;
+      border-radius:2px;
+      background: rgba(216,177,90,0.9);
+      box-shadow: 0 0 14px rgba(216,177,90,0.45);
+      opacity:0;
+      animation: twinkle 3.8s infinite;
+      z-index:0;
+      pointer-events:none;
+    }
+    @keyframes twinkle{
+      0%,100%{opacity:0; transform: translateY(0) rotate(0deg)}
+      25%{opacity:.9}
+      60%{opacity:.25; transform: translateY(-22px) rotate(60deg)}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <h1>Happy Birthday, <span class="gold">Ooha</span> 🎂</h1>
+
+    <div class="layout">
+      <div>
+        <div class="message">
+          <h3>Your message goes here</h3>
+          <p>
+            Send me the final message and photos — I’ll place them perfectly and make it feel premium ✨
+          </p>
+        </div>
+
+        <div class="musicBar">
+          <!-- IMPORTANT: upload your mp3 file into the repo root as "birthday-music.mp3" -->
+          <button id="musicBtn" class="btn">▶ Play Birthday Music</button>
+          <span class="note">Tip: browsers usually need a click to start music.</span>
+        </div>
+
+        <audio id="bgMusic" loop preload="auto">
+          <source src="birthday-music.mp3" type="audio/mpeg" />
+        </audio>
+      </div>
+
+      <div class="art">
+        <!-- sparkles -->
+        <div class="sparkle" style="left:12%; top:12%; animation-delay:.2s"></div>
+        <div class="sparkle" style="left:78%; top:18%; animation-delay:1.1s"></div>
+        <div class="sparkle" style="left:66%; top:74%; animation-delay:2.4s"></div>
+        <div class="sparkle" style="left:26%; top:70%; animation-delay:3.0s"></div>
+
+        <!-- balloons behind penguin -->
+        <div class="balloons" aria-hidden="true">
+          <div class="balloon b1" title="pop me"></div>
+          <div class="balloon b2" title="pop me"></div>
+          <div class="balloon b3" title="pop me"></div>
+          <div class="balloon b4" title="pop me"></div>
+          <div class="balloon b5" title="pop me"></div>
+        </div>
+
+        <!-- cute smiling penguin holding flowers -->
+        <div class="penguinWrap">
+          <svg class="penguin" viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cute penguin holding flowers">
+            <title>Cute penguin holding flowers</title>
+
+            <!-- shadow -->
+            <ellipse cx="210" cy="392" rx="125" ry="22" fill="rgba(0,0,0,0.35)"/>
+
+            <!-- body -->
+            <g>
+              <ellipse cx="210" cy="250" rx="122" ry="152" fill="#0C0F18"/>
+              <ellipse cx="210" cy="270" rx="84" ry="120" fill="#F5F0E6" opacity="0.98"/>
+            </g>
+
+            <!-- face -->
+            <g>
+              <ellipse cx="210" cy="154" rx="92" ry="86" fill="#0C0F18"/>
+              <ellipse cx="210" cy="162" rx="66" ry="58" fill="#F5F0E6" opacity="0.98"/>
+
+              <!-- eyes -->
+              <circle cx="186" cy="148" r="10" fill="#111A2B"/>
+              <circle cx="234" cy="148" r="10" fill="#111A2B"/>
+              <circle cx="182" cy="144" r="3" fill="#fff"/>
+              <circle cx="230" cy="144" r="3" fill="#fff"/>
+
+              <!-- cute blush -->
+              <ellipse cx="168" cy="170" rx="10" ry="6" fill="rgba(255,75,92,0.35)"/>
+              <ellipse cx="252" cy="170" rx="10" ry="6" fill="rgba(255,75,92,0.35)"/>
+
+              <!-- beak -->
+              <path d="M210 160 L192 176 Q210 192 228 176 Z" fill="#F2A83B" stroke="rgba(0,0,0,0.12)" stroke-width="2"/>
+
+              <!-- smiling mouth -->
+              <path d="M194 188 Q210 200 226 188" stroke="#111A2B" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.85"/>
+            </g>
+
+            <!-- bowtie -->
+            <g opacity="0.98">
+              <path d="M210 210 L186 198 L178 210 L186 222 Z" fill="#FF4B5C"/>
+              <path d="M210 210 L234 198 L242 210 L234 222 Z" fill="#FF4B5C"/>
+              <circle cx="210" cy="210" r="7" fill="#D8B15A"/>
+            </g>
+
+            <!-- flippers -->
+            <path d="M110 255 Q80 275 96 318 Q116 356 154 336 Q144 292 140 268 Z" fill="#0C0F18"/>
+            <path d="M310 255 Q340 275 324 318 Q304 356 266 336 Q276 292 280 268 Z" fill="#0C0F18"/>
+
+            <!-- bouquet (flowers) -->
+            <g transform="translate(210 292)">
+              <!-- stems -->
+              <path d="M-10 10 C-20 40,-30 60,-34 82" stroke="rgba(120,255,180,0.75)" stroke-width="5" fill="none" stroke-linecap="round"/>
+              <path d="M0 10 C0 40, 0 62, 0 86" stroke="rgba(120,255,180,0.75)" stroke-width="5" fill="none" stroke-linecap="round"/>
+              <path d="M10 10 C20 40, 30 60, 34 82" stroke="rgba(120,255,180,0.75)" stroke-width="5" fill="none" stroke-linecap="round"/>
+
+              <!-- wrapper -->
+              <path d="M-52 36 Q0 10 52 36 Q34 92 0 112 Q-34 92 -52 36 Z"
+                    fill="rgba(245,240,230,0.92)" stroke="rgba(216,177,90,0.7)" stroke-width="3"/>
+
+              <!-- flowers -->
+              <g>
+                <!-- left flower -->
+                <circle cx="-28" cy="6" r="8" fill="#D8B15A"/>
+                <circle cx="-38" cy="6" r="8" fill="#FF4B5C"/>
+                <circle cx="-28" cy="-4" r="8" fill="rgba(170,140,255,0.95)"/>
+                <circle cx="-18" cy="6" r="8" fill="rgba(90,220,255,0.85)"/>
+                <circle cx="-28" cy="16" r="8" fill="rgba(120,255,180,0.8)"/>
+                <circle cx="-28" cy="6" r="4" fill="#111A2B" opacity="0.85"/>
+
+                <!-- center flower -->
+                <circle cx="0" cy="-2" r="9" fill="#D8B15A"/>
+                <circle cx="-12" cy="-2" r="9" fill="#FF4B5C"/>
+                <circle cx="0" cy="-14" r="9" fill="rgba(170,140,255,0.95)"/>
+                <circle cx="12" cy="-2" r="9" fill="rgba(90,220,255,0.85)"/>
+                <circle cx="0" cy="10" r="9" fill="rgba(120,255,180,0.8)"/>
+                <circle cx="0" cy="-2" r="4.2" fill="#111A2B" opacity="0.85"/>
+
+                <!-- right flower -->
+                <circle cx="28" cy="6" r="8" fill="#D8B15A"/>
+                <circle cx="18" cy="6" r="8" fill="#FF4B5C"/>
+                <circle cx="28" cy="-4" r="8" fill="rgba(170,140,255,0.95)"/>
+                <circle cx="38" cy="6" r="8" fill="rgba(90,220,255,0.85)"/>
+                <circle cx="28" cy="16" r="8" fill="rgba(120,255,180,0.8)"/>
+                <circle cx="28" cy="6" r="4" fill="#111A2B" opacity="0.85"/>
+              </g>
+            </g>
+
+            <!-- feet -->
+            <path d="M168 376 Q190 360 206 376 Q190 392 168 386 Z" fill="#F2A83B"/>
+            <path d="M252 376 Q230 360 214 376 Q230 392 252 386 Z" fill="#F2A83B"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Balloon pop interaction
+    document.querySelectorAll('.balloon').forEach(b => {
+      b.addEventListener('click', () => {
+        b.classList.add('pop');
+        setTimeout(() => {
+          b.classList.remove('pop');
+          // re-show balloon after a moment so it feels interactive
+          b.style.display = 'none';
+          setTimeout(() => b.style.display = 'block', 650);
+        }, 350);
+      });
+    });
+
+    // Music Play/Pause
+    const music = document.getElementById('bgMusic');
+    const btn = document.getElementById('musicBtn');
+
+    let playing = false;
+    btn.addEventListener('click', async () => {
+      try{
+        if(!playing){
+          await music.play();
+          playing = true;
+          btn.textContent = '⏸ Pause Birthday Music';
+        }else{
+          music.pause();
+          playing = false;
+          btn.textContent = '▶ Play Birthday Music';
+        }
+      }catch(e){
+        alert("Music couldn't start. Make sure birthday-music.mp3 is uploaded in the repo root.");
+      }
+    });
+  </script>
+</body>
+</html>
