@@ -67,12 +67,10 @@
       line-height:1.7;
       font-size:15.5px;
       white-space:pre-wrap;
-      min-height: 210px; /* keeps layout stable before opening */
+      min-height: 210px;
     }
 
-    .placeholder{
-      opacity:0.72;
-    }
+    .placeholder{ opacity:0.72; }
 
     .cursor{
       display:none;
@@ -103,7 +101,45 @@
       font-weight:800;
     }
 
-    /* --- Penguin container --- */
+    /* Photo surprise box (hidden first) */
+    .photoWrap{
+      margin-top:14px;
+      display:none;
+      border-radius:16px;
+      overflow:hidden;
+      border:1px solid rgba(216,177,90,0.28);
+      background: rgba(255,255,255,0.03);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+      transform: translateY(10px) scale(0.98);
+      opacity:0;
+      animation: none;
+    }
+
+    .photoWrap.show{
+      display:block;
+      animation: photoIn .55s ease-out forwards;
+    }
+
+    @keyframes photoIn{
+      to { transform: translateY(0) scale(1); opacity:1; }
+    }
+
+    .photoWrap img{
+      width:100%;
+      height:260px;
+      object-fit:cover;
+      display:block;
+    }
+
+    .photoCaption{
+      padding:10px 12px;
+      font-size:13px;
+      opacity:0.88;
+      border-top:1px solid rgba(216,177,90,0.18);
+      background: rgba(0,0,0,0.20);
+    }
+
+    /* --- Penguin right side --- */
     .art{
       display:flex;
       justify-content:center;
@@ -187,7 +223,14 @@
 
         <div class="btnRow">
           <button id="openBtn" class="btn">💌 Open Message</button>
-          <button id="replayBtn" class="btn" style="display:none;">↻ Replay Message</button>
+          <button id="replayBtn" class="btn" style="display:none;">↻ Replay</button>
+          <button id="photoBtn" class="btn">🖼️ Open Photo Surprise</button>
+        </div>
+
+        <!-- Hidden photo section -->
+        <div id="photoWrap" class="photoWrap" aria-live="polite">
+          <img src="./surprise-photo.jpg" alt="Photo surprise">
+          <div class="photoCaption">✨ A little memory for you, Ooha ✨</div>
         </div>
       </div>
 
@@ -246,6 +289,24 @@ Have a day as special as you are. Meet you soon ❤️`;
 
     openBtn.addEventListener("click", startTyping);
     replayBtn.addEventListener("click", replay);
+
+    // Photo surprise toggle
+    const photoBtn = document.getElementById("photoBtn");
+    const photoWrap = document.getElementById("photoWrap");
+    let photoOpen = false;
+
+    photoBtn.addEventListener("click", () => {
+      photoOpen = !photoOpen;
+      if(photoOpen){
+        photoWrap.classList.add("show");
+        photoBtn.textContent = "🙈 Hide Photo Surprise";
+      }else{
+        photoWrap.classList.remove("show");
+        // hide after animation time
+        setTimeout(() => { if(!photoOpen) photoWrap.style.display = "none"; }, 50);
+        photoBtn.textContent = "🖼️ Open Photo Surprise";
+      }
+    });
 
     // Penguin click: extra dance
     const penguinBtn = document.getElementById("penguinBtn");
