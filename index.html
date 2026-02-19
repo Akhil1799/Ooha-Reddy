@@ -97,7 +97,7 @@
       padding:16px;
       border:1px solid rgba(216,177,90,0.25);
       background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-      min-height:390px;
+      min-height:410px;
       overflow:hidden;
     }
 
@@ -109,7 +109,7 @@
       border-radius:50% 50% 46% 46%;
       opacity:0.72;
       z-index:1;
-      animation: floaty 7s ease-in-out infinite;
+      animation: floaty 7.2s ease-in-out infinite;
     }
     .balloon:after{
       content:"";
@@ -117,11 +117,10 @@
       left:50%;
       top:102px;
       width:2px;
-      height:140px;
+      height:145px;
       background: rgba(245,240,230,0.28);
       transform: translateX(-50%);
     }
-
     .b1{ background: rgba(216,177,90,0.92); left:8%;  top:56%; animation-delay:.1s;}
     .b2{ background: rgba(255,75,92,0.86); left:22%; top:18%; animation-delay:1.1s;}
     .b3{ background: rgba(90,220,255,0.72); right:16%; top:22%; animation-delay:2.2s;}
@@ -130,18 +129,18 @@
 
     @keyframes floaty{
       0%,100%{ transform: translateY(0) rotate(-2deg); }
-      50%{ transform: translateY(-20px) rotate(2deg); }
+      50%{ transform: translateY(-22px) rotate(2deg); }
     }
 
-    /* Penguin hop animation */
+    /* Dancing penguin */
     .penguinWrap{
       position:relative;
       z-index:2;
       display:flex;
       justify-content:center;
       align-items:center;
-      min-height:340px;
-      margin-top:10px;
+      min-height:350px;
+      margin-top:6px;
     }
 
     .penguinBtn{
@@ -150,27 +149,38 @@
       padding:0;
       cursor:pointer;
       transform-origin: 50% 85%;
-      animation: hop 1.1s ease-in-out infinite;
-    }
-    .penguinBtn:active{ transform: scale(0.985); }
-
-    @keyframes hop{
-      0%,100% { transform: translateY(6px) scale(1); }
-      50%     { transform: translateY(-12px) scale(1.02); }
+      animation: dance 1.25s ease-in-out infinite;
     }
 
-    .jumpOnce{
-      animation: bigJump .55s cubic-bezier(.2,.9,.2,1) 1;
+    /* whole-body dance: sway + tiny hops */
+    @keyframes dance{
+      0%   { transform: translateY(6px) rotate(-2deg) scale(1); }
+      25%  { transform: translateY(-6px) rotate(2deg)  scale(1.01); }
+      50%  { transform: translateY(6px) rotate(0deg)   scale(1); }
+      75%  { transform: translateY(-6px) rotate(-2deg) scale(1.01); }
+      100% { transform: translateY(6px) rotate(-2deg)  scale(1); }
     }
-    @keyframes bigJump{
-      0%   { transform: translateY(6px) scale(1); }
-      55%  { transform: translateY(-30px) scale(1.06); }
-      100% { transform: translateY(6px) scale(1); }
+
+    /* extra dance on click */
+    .party{
+      animation: partyDance .7s cubic-bezier(.2,.9,.2,1) 1 !important;
     }
+    @keyframes partyDance{
+      0%   { transform: translateY(6px) rotate(-2deg) scale(1); }
+      40%  { transform: translateY(-24px) rotate(10deg) scale(1.06); }
+      70%  { transform: translateY(2px) rotate(-10deg) scale(1.03); }
+      100% { transform: translateY(6px) rotate(-2deg) scale(1); }
+    }
+
+    /* flippers wave (inside SVG via CSS targets) */
+    .flipperL{ transform-origin: 132px 245px; animation: waveL 1.25s ease-in-out infinite; }
+    .flipperR{ transform-origin: 288px 245px; animation: waveR 1.25s ease-in-out infinite; }
+    @keyframes waveL{ 0%,100%{ transform: rotate(6deg);} 50%{ transform: rotate(-12deg);} }
+    @keyframes waveR{ 0%,100%{ transform: rotate(-6deg);} 50%{ transform: rotate(12deg);} }
 
     svg.penguin{
       width:100%;
-      max-width:340px;
+      max-width:360px;
       filter: drop-shadow(0 18px 28px rgba(0,0,0,0.45));
       user-select:none;
     }
@@ -206,11 +216,10 @@
         </div>
 
         <button id="replayBtn" class="btn">↻ Replay Message</button>
-        <div style="margin-top:10px; font-size:13px; opacity:.82;">Tip: click the penguin 🐧✨</div>
+        <div style="margin-top:10px; font-size:13px; opacity:.82;">Click the penguin for extra dance 🐧✨</div>
       </div>
 
       <div class="art" id="art">
-        <!-- floating balloons behind -->
         <div class="balloon b1"></div>
         <div class="balloon b2"></div>
         <div class="balloon b3"></div>
@@ -218,63 +227,70 @@
         <div class="balloon b5"></div>
 
         <div class="penguinWrap">
-          <button class="penguinBtn" id="penguinBtn" aria-label="Click the penguin">
-            <!-- Penguin with birthday cap + cake -->
+          <button class="penguinBtn" id="penguinBtn" aria-label="Dancing penguin">
+            <!-- More “realistic” cute SVG with shading + cap + cake -->
             <svg class="penguin" viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="shine" cx="35%" cy="25%" r="70%">
+                  <stop offset="0%" stop-color="rgba(255,255,255,0.22)"/>
+                  <stop offset="55%" stop-color="rgba(255,255,255,0.06)"/>
+                  <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+                </radialGradient>
+                <radialGradient id="belly" cx="45%" cy="35%" r="75%">
+                  <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.95"/>
+                  <stop offset="70%" stop-color="#F5F0E6" stop-opacity="0.95"/>
+                  <stop offset="100%" stop-color="#E9E1D4" stop-opacity="0.95"/>
+                </radialGradient>
+              </defs>
+
               <!-- shadow -->
               <ellipse cx="210" cy="392" rx="125" ry="22" fill="rgba(0,0,0,0.35)"/>
 
-              <!-- body -->
-              <ellipse cx="210" cy="250" rx="122" ry="152" fill="#0C0F18"/>
-              <ellipse cx="210" cy="270" rx="84" ry="120" fill="#F5F0E6"/>
+              <!-- body with subtle highlight -->
+              <ellipse cx="210" cy="252" rx="126" ry="156" fill="#0B0E16"/>
+              <ellipse cx="190" cy="220" rx="130" ry="160" fill="url(#shine)" opacity="0.9"/>
+              <ellipse cx="210" cy="275" rx="88" ry="124" fill="url(#belly)"/>
 
               <!-- head -->
-              <ellipse cx="210" cy="154" rx="92" ry="86" fill="#0C0F18"/>
-              <ellipse cx="210" cy="162" rx="66" ry="58" fill="#F5F0E6"/>
+              <ellipse cx="210" cy="152" rx="98" ry="92" fill="#0B0E16"/>
+              <ellipse cx="210" cy="162" rx="72" ry="64" fill="url(#belly)"/>
 
               <!-- eyes -->
-              <circle cx="186" cy="148" r="10" fill="#111A2B"/>
-              <circle cx="234" cy="148" r="10" fill="#111A2B"/>
-              <circle cx="182" cy="144" r="3" fill="#fff"/>
-              <circle cx="230" cy="144" r="3" fill="#fff"/>
+              <circle cx="184" cy="146" r="11" fill="#0F1826"/>
+              <circle cx="236" cy="146" r="11" fill="#0F1826"/>
+              <circle cx="180" cy="142" r="3.2" fill="#fff"/>
+              <circle cx="232" cy="142" r="3.2" fill="#fff"/>
 
               <!-- blush -->
-              <ellipse cx="168" cy="170" rx="10" ry="6" fill="rgba(255,75,92,0.35)"/>
-              <ellipse cx="252" cy="170" rx="10" ry="6" fill="rgba(255,75,92,0.35)"/>
+              <ellipse cx="165" cy="170" rx="11" ry="7" fill="rgba(255,75,92,0.30)"/>
+              <ellipse cx="255" cy="170" rx="11" ry="7" fill="rgba(255,75,92,0.30)"/>
 
               <!-- beak -->
-              <path d="M210 160 L192 176 Q210 192 228 176 Z" fill="#F2A83B"/>
-
-              <!-- smile -->
-              <path d="M194 188 Q210 200 226 188" stroke="#111A2B" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.85"/>
-
-              <!-- flippers -->
-              <path d="M110 255 Q80 275 96 318 Q116 356 154 336 Q144 292 140 268 Z" fill="#0C0F18"/>
-              <path d="M310 255 Q340 275 324 318 Q304 356 266 336 Q276 292 280 268 Z" fill="#0C0F18"/>
+              <path d="M210 156 L190 176 Q210 196 230 176 Z" fill="#F2A83B" opacity="0.98"/>
+              <path d="M198 192 Q210 202 222 192" stroke="rgba(15,24,38,0.7)" stroke-width="4" fill="none" stroke-linecap="round"/>
 
               <!-- birthday cap -->
-              <g transform="translate(210 76)">
-                <path d="M0 -54 L-46 18 L46 18 Z" fill="#FF4B5C"/>
-                <path d="M-46 18 Q0 36 46 18" fill="rgba(255,255,255,0.22)"/>
-                <circle cx="0" cy="-56" r="10" fill="#D8B15A"/>
+              <g transform="translate(210 72)">
+                <path d="M0 -58 L-50 20 L50 20 Z" fill="#FF4B5C"/>
+                <path d="M-50 20 Q0 40 50 20" fill="rgba(255,255,255,0.20)"/>
+                <circle cx="0" cy="-60" r="11" fill="#D8B15A"/>
               </g>
 
-              <!-- cake in hands -->
-              <g transform="translate(210 300)">
-                <!-- plate -->
-                <ellipse cx="0" cy="44" rx="58" ry="12" fill="rgba(245,240,230,0.85)"/>
-                <!-- cake base -->
-                <rect x="-48" y="-10" width="96" height="54" rx="14" fill="rgba(170,140,255,0.85)"/>
-                <!-- frosting -->
-                <path d="M-48 -10 Q-30 -26 -12 -10 Q6 -26 24 -10 Q42 -26 48 -10 Z"
-                      fill="rgba(216,177,90,0.9)"/>
-                <!-- candle -->
-                <rect x="-6" y="-48" width="12" height="26" rx="4" fill="rgba(90,220,255,0.85)"/>
-                <path d="M0 -60 C10 -52 8 -40 0 -38 C-8 -40 -10 -52 0 -60 Z" fill="#FF4B5C"/>
-                <!-- sprinkles -->
-                <circle cx="-26" cy="10" r="3" fill="#FF4B5C"/>
-                <circle cx="0" cy="18" r="3" fill="#5AC8FA"/>
-                <circle cx="24" cy="8" r="3" fill="#D8B15A"/>
+              <!-- flippers (animated via CSS classes) -->
+              <path class="flipperL" d="M112 250 Q70 276 92 326 Q118 370 165 344 Q150 296 146 266 Z" fill="#0B0E16"/>
+              <path class="flipperR" d="M308 250 Q350 276 328 326 Q302 370 255 344 Q270 296 274 266 Z" fill="#0B0E16"/>
+
+              <!-- cake -->
+              <g transform="translate(210 306)">
+                <ellipse cx="0" cy="46" rx="64" ry="13" fill="rgba(245,240,230,0.86)"/>
+                <rect x="-54" y="-8" width="108" height="58" rx="16" fill="rgba(170,140,255,0.88)"/>
+                <path d="M-54 -8 Q-34 -28 -14 -8 Q6 -28 26 -8 Q46 -28 54 -8 Z"
+                      fill="rgba(216,177,90,0.92)"/>
+                <rect x="-6" y="-50" width="12" height="26" rx="4" fill="rgba(90,220,255,0.85)"/>
+                <path d="M0 -62 C10 -54 9 -40 0 -38 C-9 -40 -10 -54 0 -62 Z" fill="#FF4B5C"/>
+                <circle cx="-28" cy="14" r="3" fill="#FF4B5C"/>
+                <circle cx="0" cy="20" r="3" fill="#5AC8FA"/>
+                <circle cx="28" cy="12" r="3" fill="#D8B15A"/>
               </g>
 
               <!-- feet -->
@@ -288,7 +304,7 @@
   </div>
 
   <script>
-    // ===== Typewriter message =====
+    // Typewriter message
     const message = `Happy happy birthday, my kothi fellow 😊
 To one of the most stubborn, driven, and inspiring women I know, your dedication to your dreams is honestly something I admire so much. Stay the same beautiful, hardworking, and strong person you are. Keep chasing your success, because you’re made for amazing things.
 Have a day as special as you are. Meet you soon ❤️`;
@@ -301,7 +317,6 @@ Have a day as special as you are. Meet you soon ❤️`;
       typed.textContent = "";
       cursor.style.display = "inline-block";
       let i = 0;
-
       const timer = setInterval(() => {
         typed.textContent += message.charAt(i);
         i++;
@@ -311,19 +326,16 @@ Have a day as special as you are. Meet you soon ❤️`;
         }
       }, 16);
     }
-
     typeEffect();
     replayBtn.addEventListener("click", typeEffect);
 
-    // ===== Penguin click: big jump + sparkle burst =====
+    // Click penguin: extra dance + sparkles
     const penguinBtn = document.getElementById("penguinBtn");
     const art = document.getElementById("art");
 
     function sparkleBurst(){
       const rect = penguinBtn.getBoundingClientRect();
       const artRect = art.getBoundingClientRect();
-
-      // center of penguin within art
       const cx = (rect.left + rect.right)/2 - artRect.left;
       const cy = (rect.top + rect.bottom)/2 - artRect.top;
 
@@ -332,17 +344,17 @@ Have a day as special as you are. Meet you soon ❤️`;
         s.className = "spark";
         s.style.left = cx + "px";
         s.style.top  = cy + "px";
-        s.style.setProperty("--dx", (Math.random()*140 - 70) + "px");
-        s.style.setProperty("--dy", (Math.random()*120 - 90) + "px");
+        s.style.setProperty("--dx", (Math.random()*150 - 75) + "px");
+        s.style.setProperty("--dy", (Math.random()*130 - 95) + "px");
         art.appendChild(s);
         setTimeout(()=> s.remove(), 700);
       }
     }
 
     penguinBtn.addEventListener("click", () => {
-      penguinBtn.classList.remove("jumpOnce");
-      void penguinBtn.offsetWidth; // restart animation
-      penguinBtn.classList.add("jumpOnce");
+      penguinBtn.classList.remove("party");
+      void penguinBtn.offsetWidth;
+      penguinBtn.classList.add("party");
       sparkleBurst();
     });
   </script>
