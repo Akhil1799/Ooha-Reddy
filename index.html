@@ -21,15 +21,18 @@
       min-height:100vh;
       display:flex;
       justify-content:center;
-      align-items:center;
+      align-items:flex-start; /* allow content to grow downward */
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
       background:
         radial-gradient(1200px 800px at 50% 25%, rgba(216,177,90,0.14), transparent 55%),
         radial-gradient(900px 700px at 20% 85%, rgba(255,75,92,0.10), transparent 55%),
         linear-gradient(135deg, var(--bg1), var(--bg2));
       color:var(--cream);
-      overflow:hidden;
       padding:22px;
+
+      /* ✅ FIX: allow vertical scrolling */
+      overflow-x:hidden;
+      overflow-y:auto;
     }
 
     .card{
@@ -53,7 +56,7 @@
       display:grid;
       grid-template-columns: 1.1fr 0.9fr;
       gap:28px;
-      align-items:center;
+      align-items:start;
     }
     @media (max-width: 900px){
       .layout{ grid-template-columns: 1fr; }
@@ -101,7 +104,7 @@
       font-weight:800;
     }
 
-    /* Photo surprise box (hidden first) */
+    /* Photo surprise box */
     .photoWrap{
       margin-top:14px;
       display:none;
@@ -123,11 +126,11 @@
       to { transform: translateY(0) scale(1); opacity:1; }
     }
 
-    /* Better image sizing (no big empty area / no fixed 260px) */
+    /* ✅ Image size tuned so it fits nicely and still scrolls if needed */
     .photoWrap img{
       width:100%;
       height:auto;
-      max-height:420px;
+      max-height:560px;
       object-fit:contain;
       display:block;
       background: rgba(0,0,0,0.18);
@@ -141,7 +144,7 @@
       background: rgba(0,0,0,0.20);
     }
 
-    /* --- Penguin right side --- */
+    /* Penguin right side */
     .art{
       display:flex;
       justify-content:center;
@@ -229,9 +232,7 @@
           <button id="photoBtn" class="btn">🖼️ Open Photo Surprise</button>
         </div>
 
-        <!-- Hidden photo section -->
         <div id="photoWrap" class="photoWrap">
-          <!-- ✅ IMPORTANT: PNG filename -->
           <img src="./surprise-photo.png" alt="Photo surprise">
           <div class="photoCaption">✨ A little memory for you, Ooha ✨</div>
         </div>
@@ -293,7 +294,6 @@ Have a day as special as you are. Meet you soon ❤️`;
     openBtn.addEventListener("click", startTyping);
     replayBtn.addEventListener("click", replay);
 
-    // Photo surprise toggle (cleaner, no display glitches)
     const photoBtn = document.getElementById("photoBtn");
     const photoWrap = document.getElementById("photoWrap");
 
@@ -302,7 +302,6 @@ Have a day as special as you are. Meet you soon ❤️`;
       photoBtn.textContent = isOpen ? "🙈 Hide Photo Surprise" : "🖼️ Open Photo Surprise";
     });
 
-    // Penguin click: extra dance
     const penguinBtn = document.getElementById("penguinBtn");
     penguinBtn.addEventListener("click", () => {
       penguinBtn.classList.remove("party");
