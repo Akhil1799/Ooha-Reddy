@@ -13,7 +13,6 @@
       --cream:#F5F0E6;
       --accent:#FF4B5C;
     }
-
     *{box-sizing:border-box}
 
     body{
@@ -29,7 +28,6 @@
         linear-gradient(135deg, var(--bg1), var(--bg2));
       color:var(--cream);
       padding:22px;
-
       overflow-x:hidden;
       overflow-y:auto;
     }
@@ -71,7 +69,6 @@
       white-space:pre-wrap;
       min-height: 210px;
     }
-
     .placeholder{ opacity:0.72; }
 
     .cursor{
@@ -92,7 +89,6 @@
       flex-wrap:wrap;
       align-items:center;
     }
-
     .btn{
       border:1px solid rgba(216,177,90,0.45);
       background: rgba(0,0,0,0.25);
@@ -114,15 +110,11 @@
       transform: translateY(10px) scale(0.98);
       opacity:0;
     }
-
     .photoWrap.show{
       display:block;
       animation: photoIn .55s ease-out forwards;
     }
-
-    @keyframes photoIn{
-      to { transform: translateY(0) scale(1); opacity:1; }
-    }
+    @keyframes photoIn{ to { transform: translateY(0) scale(1); opacity:1; } }
 
     .photoWrap img{
       width:100%;
@@ -132,7 +124,6 @@
       display:block;
       background: rgba(0,0,0,0.18);
     }
-
     .photoCaption{
       padding:10px 12px;
       font-size:13px;
@@ -147,7 +138,6 @@
       align-items:center;
       position:relative;
     }
-
     .penguinStage{
       position:relative;
       display:flex;
@@ -156,7 +146,6 @@
       padding:30px;
       border-radius:28px;
     }
-
     .penguinStage::before{
       content:"";
       position:absolute;
@@ -170,7 +159,6 @@
       opacity:0.9;
       z-index:0;
     }
-
     .penguinBtn{
       border:0;
       background:transparent;
@@ -181,7 +169,6 @@
       transform-origin: 50% 85%;
       animation: dance 1.2s ease-in-out infinite;
     }
-
     .penguinImg{
       width:min(360px, 80%);
       height:auto;
@@ -190,7 +177,6 @@
       user-select:none;
       -webkit-user-drag:none;
     }
-
     @keyframes dance{
       0%   { transform: translateY(6px) rotate(-2deg) scale(1); }
       25%  { transform: translateY(-7px) rotate(2deg)  scale(1.02); }
@@ -198,10 +184,7 @@
       75%  { transform: translateY(-7px) rotate(-2deg) scale(1.02); }
       100% { transform: translateY(6px) rotate(-2deg)  scale(1); }
     }
-
-    .party{
-      animation: partyDance .75s cubic-bezier(.2,.9,.2,1) 1 !important;
-    }
+    .party{ animation: partyDance .75s cubic-bezier(.2,.9,.2,1) 1 !important; }
     @keyframes partyDance{
       0%   { transform: translateY(6px) rotate(-2deg) scale(1); }
       35%  { transform: translateY(-26px) rotate(10deg) scale(1.07); }
@@ -226,8 +209,6 @@
           <button id="openBtn" class="btn">💌 Open Message</button>
           <button id="replayBtn" class="btn" style="display:none;">↻ Replay</button>
           <button id="photoBtn" class="btn">🖼️ Open Photo Surprise</button>
-
-          <!-- ✅ Music -->
           <button id="musicBtn" class="btn">🎵 Play Song</button>
         </div>
 
@@ -236,9 +217,9 @@
           <div class="photoCaption">✨ A little memory for you, Ooha ✨</div>
         </div>
 
-        <!-- ✅ IMPORTANT: file name must match exactly -->
+        <!-- ✅ small b filename -->
         <audio id="bgMusic" preload="auto">
-          <source src="./Birthday-Song.mp3" type="audio/mpeg">
+          <source src="./birthday-song.mp3" type="audio/mpeg">
           Your browser does not support audio.
         </audio>
       </div>
@@ -299,7 +280,6 @@ Have a day as special as you are. Meet you soon ❤️`;
     openBtn.addEventListener("click", startTyping);
     replayBtn.addEventListener("click", replay);
 
-    // Photo toggle
     const photoBtn = document.getElementById("photoBtn");
     const photoWrap = document.getElementById("photoWrap");
     photoBtn.addEventListener("click", () => {
@@ -307,7 +287,6 @@ Have a day as special as you are. Meet you soon ❤️`;
       photoBtn.textContent = isOpen ? "🙈 Hide Photo Surprise" : "🖼️ Open Photo Surprise";
     });
 
-    // Penguin click: extra dance
     const penguinBtn = document.getElementById("penguinBtn");
     penguinBtn.addEventListener("click", () => {
       penguinBtn.classList.remove("party");
@@ -315,7 +294,7 @@ Have a day as special as you are. Meet you soon ❤️`;
       penguinBtn.classList.add("party");
     });
 
-    // ✅ Music play/pause (must be user click)
+    // Music play/pause
     const musicBtn = document.getElementById("musicBtn");
     const bgMusic = document.getElementById("bgMusic");
     let musicOn = false;
@@ -323,7 +302,7 @@ Have a day as special as you are. Meet you soon ❤️`;
     musicBtn.addEventListener("click", async () => {
       try {
         if (!musicOn) {
-          bgMusic.volume = 0.55;   // soft
+          bgMusic.volume = 0.55;
           bgMusic.loop = true;
           await bgMusic.play();
           musicOn = true;
@@ -334,7 +313,7 @@ Have a day as special as you are. Meet you soon ❤️`;
           musicBtn.textContent = "🎵 Play Song";
         }
       } catch (e) {
-        alert("Song couldn’t play. Make sure the file is named exactly: Birthday-Song.mp3 and is in the repo root.");
+        alert("Song couldn’t play. Check the exact filename in your repo and update it here.");
         console.error(e);
       }
     });
