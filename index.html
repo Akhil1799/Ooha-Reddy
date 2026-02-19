@@ -191,6 +191,13 @@
       65%  { transform: translateY(2px) rotate(-12deg) scale(1.04); }
       100% { transform: translateY(6px) rotate(-2deg) scale(1); }
     }
+
+    /* small status text */
+    .status{
+      margin-top:10px;
+      font-size:12.5px;
+      opacity:.85;
+    }
   </style>
 </head>
 
@@ -212,15 +219,16 @@
           <button id="musicBtn" class="btn">🎵 Play Song</button>
         </div>
 
+        <div id="musicStatus" class="status"></div>
+
         <div id="photoWrap" class="photoWrap">
           <img src="./surprise-photo.png" alt="Photo surprise">
           <div class="photoCaption">✨ A little memory for you, Ooha ✨</div>
         </div>
 
-        <!-- ✅ small b filename -->
-        <audio id="bgMusic" preload="auto">
-          <source src="./birthday-song.mp3" type="audio/mpeg">
-          Your browser does not support audio.
+        <!-- ✅ Use absolute GitHub Pages URL for reliability -->
+        <audio id="bgMusic" preload="auto" crossorigin="anonymous">
+          <source src="https://akhil1799.github.io/Ooha-Reddy/birthday-song.mp3" type="audio/mpeg">
         </audio>
       </div>
 
@@ -235,6 +243,7 @@
   </div>
 
   <script>
+    // ===== Typewriter message =====
     const message = `Happy happy birthday, my kothi fellow 😊
 To one of the most stubborn, driven, and inspiring women I know, your dedication to your dreams is honestly something I admire so much. Stay the same beautiful, hardworking, and strong person you are. Keep chasing your success, because you’re made for amazing things.
 Have a day as special as you are. Meet you soon ❤️`;
@@ -280,6 +289,7 @@ Have a day as special as you are. Meet you soon ❤️`;
     openBtn.addEventListener("click", startTyping);
     replayBtn.addEventListener("click", replay);
 
+    // ===== Photo toggle =====
     const photoBtn = document.getElementById("photoBtn");
     const photoWrap = document.getElementById("photoWrap");
     photoBtn.addEventListener("click", () => {
@@ -287,6 +297,7 @@ Have a day as special as you are. Meet you soon ❤️`;
       photoBtn.textContent = isOpen ? "🙈 Hide Photo Surprise" : "🖼️ Open Photo Surprise";
     });
 
+    // ===== Penguin click: extra dance =====
     const penguinBtn = document.getElementById("penguinBtn");
     penguinBtn.addEventListener("click", () => {
       penguinBtn.classList.remove("party");
@@ -294,26 +305,35 @@ Have a day as special as you are. Meet you soon ❤️`;
       penguinBtn.classList.add("party");
     });
 
-    // Music play/pause
+    // ===== Music play/pause (with better debugging) =====
     const musicBtn = document.getElementById("musicBtn");
     const bgMusic = document.getElementById("bgMusic");
+    const musicStatus = document.getElementById("musicStatus");
     let musicOn = false;
+
+    bgMusic.addEventListener("error", () => {
+      musicStatus.textContent = "⚠️ Audio failed to load. Check the filename + link for the mp3.";
+    });
 
     musicBtn.addEventListener("click", async () => {
       try {
         if (!musicOn) {
+          musicStatus.textContent = "Loading song…";
           bgMusic.volume = 0.55;
           bgMusic.loop = true;
+
           await bgMusic.play();
           musicOn = true;
           musicBtn.textContent = "⏸ Pause Song";
+          musicStatus.textContent = "🎶 Playing…";
         } else {
           bgMusic.pause();
           musicOn = false;
           musicBtn.textContent = "🎵 Play Song";
+          musicStatus.textContent = "Paused.";
         }
       } catch (e) {
-        alert("Song couldn’t play. Check the exact filename in your repo and update it here.");
+        musicStatus.textContent = "⚠️ Couldn’t play. Try hard refresh (Cmd+Shift+R) or check mp3 name.";
         console.error(e);
       }
     });
