@@ -55,7 +55,6 @@
       gap:28px;
       align-items:center;
     }
-
     @media (max-width: 900px){
       .layout{ grid-template-columns: 1fr; }
     }
@@ -68,27 +67,40 @@
       line-height:1.7;
       font-size:15.5px;
       white-space:pre-wrap;
+      min-height: 210px; /* keeps layout stable before opening */
+    }
+
+    .placeholder{
+      opacity:0.72;
     }
 
     .cursor{
-      display:inline-block;
+      display:none;
       width:10px;
       height:18px;
       background: rgba(245,240,230,0.65);
       margin-left:6px;
       animation: blink .8s infinite;
+      vertical-align:middle;
     }
     @keyframes blink{ 0%,49%{opacity:1} 50%,100%{opacity:0} }
 
-    .btn{
+    .btnRow{
       margin-top:12px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .btn{
       border:1px solid rgba(216,177,90,0.45);
       background: rgba(0,0,0,0.25);
       color: var(--cream);
       padding:10px 14px;
       border-radius:999px;
       cursor:pointer;
-      font-weight:700;
+      font-weight:800;
     }
 
     /* --- Penguin container --- */
@@ -108,7 +120,6 @@
       border-radius:28px;
     }
 
-    /* Birthday themed glow background */
     .penguinStage::before{
       content:"";
       position:absolute;
@@ -139,6 +150,8 @@
       height:auto;
       display:block;
       filter: drop-shadow(0 18px 28px rgba(0,0,0,0.45));
+      user-select:none;
+      -webkit-user-drag:none;
     }
 
     @keyframes dance{
@@ -152,14 +165,12 @@
     .party{
       animation: partyDance .75s cubic-bezier(.2,.9,.2,1) 1 !important;
     }
-
     @keyframes partyDance{
       0%   { transform: translateY(6px) rotate(-2deg) scale(1); }
       35%  { transform: translateY(-26px) rotate(10deg) scale(1.07); }
       65%  { transform: translateY(2px) rotate(-12deg) scale(1.04); }
       100% { transform: translateY(6px) rotate(-2deg) scale(1); }
     }
-
   </style>
 </head>
 
@@ -170,15 +181,19 @@
     <div class="layout">
       <div>
         <div class="message">
-          <span id="typed"></span><span id="cursor" class="cursor"></span>
+          <span id="typed" class="placeholder">💌 Click “Open Message” to reveal your birthday wish…</span>
+          <span id="cursor" class="cursor"></span>
         </div>
 
-        <button id="replayBtn" class="btn">↻ Replay Message</button>
+        <div class="btnRow">
+          <button id="openBtn" class="btn">💌 Open Message</button>
+          <button id="replayBtn" class="btn" style="display:none;">↻ Replay Message</button>
+        </div>
       </div>
 
       <div class="art">
         <div class="penguinStage">
-          <button class="penguinBtn" id="penguinBtn">
+          <button class="penguinBtn" id="penguinBtn" aria-label="Dancing 3D penguin">
             <img class="penguinImg" src="./penguin-3d.png" alt="Cute 3D Penguin">
           </button>
         </div>
@@ -193,27 +208,47 @@ Have a day as special as you are. Meet you soon ❤️`;
 
     const typed = document.getElementById("typed");
     const cursor = document.getElementById("cursor");
+    const openBtn = document.getElementById("openBtn");
     const replayBtn = document.getElementById("replayBtn");
 
-    function typeEffect(){
+    let timer = null;
+    let isTyping = false;
+
+    function startTyping(){
+      if (isTyping) return;
+      isTyping = true;
+
+      clearInterval(timer);
+      typed.classList.remove("placeholder");
       typed.textContent = "";
       cursor.style.display = "inline-block";
+
+      openBtn.style.display = "none";
+      replayBtn.style.display = "inline-block";
+
       let i = 0;
-      const timer = setInterval(() => {
+      timer = setInterval(() => {
         typed.textContent += message.charAt(i);
         i++;
         if(i >= message.length){
           clearInterval(timer);
           cursor.style.display = "none";
+          isTyping = false;
         }
       }, 16);
     }
 
-    typeEffect();
-    replayBtn.addEventListener("click", typeEffect);
+    function replay(){
+      clearInterval(timer);
+      isTyping = false;
+      startTyping();
+    }
 
+    openBtn.addEventListener("click", startTyping);
+    replayBtn.addEventListener("click", replay);
+
+    // Penguin click: extra dance
     const penguinBtn = document.getElementById("penguinBtn");
-
     penguinBtn.addEventListener("click", () => {
       penguinBtn.classList.remove("party");
       void penguinBtn.offsetWidth;
