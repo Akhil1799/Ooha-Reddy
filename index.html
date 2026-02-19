@@ -33,33 +33,37 @@
     }
 
     /* 🎀 + 🎈 background layers (behind everything) */
-    #ribbons{
+    #ribbons, #confetti{
       position: fixed;
       inset: 0;
       width: 100%;
       height: 100%;
       z-index: 0;
       pointer-events: none;
-      opacity: 0.75;
     }
+    #ribbons{ opacity: 0.82; }
+    #confetti{ opacity: 1; }
+
     .balloons{
       position: fixed;
       inset: 0;
       z-index: 0;
       pointer-events: none;
       overflow: hidden;
-      opacity: 0.55;
+      opacity: 0.62; /* a bit more visible */
+      filter: saturate(1.05);
     }
     .balloon{
       position:absolute;
       left: calc(var(--x) * 1%);
-      bottom: -140px;
+      bottom: -180px;
       width: calc(var(--size) * 1px);
-      height: calc(var(--size) * 1.25px);
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.0) 35%),
-                  var(--c);
+      height: calc(var(--size) * 1.28px);
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.85), rgba(255,255,255,0.0) 35%),
+        var(--c);
       border-radius: 50% 50% 48% 48%;
-      filter: drop-shadow(0 10px 18px rgba(0,0,0,0.35));
+      filter: drop-shadow(0 12px 20px rgba(0,0,0,0.38));
       transform: translateX(0) rotate(0deg);
       animation:
         floatUp calc(var(--dur) * 1s) linear infinite,
@@ -69,21 +73,21 @@
       content:"";
       position:absolute;
       left:50%;
-      bottom:-10px;
-      width:14px;
-      height:12px;
+      bottom:-12px;
+      width:16px;
+      height:14px;
       background: rgba(0,0,0,0.12);
       transform: translateX(-50%) rotate(45deg);
       border-radius: 3px;
-      opacity: 0.35;
+      opacity: 0.32;
     }
     .string{
       position:absolute;
       left:50%;
       top:100%;
       width:2px;
-      height:110px;
-      background: rgba(245,240,230,0.35);
+      height:130px;
+      background: rgba(245,240,230,0.32);
       transform: translateX(-50%);
       border-radius: 999px;
     }
@@ -91,11 +95,11 @@
       0%{ transform: translateY(0); opacity: 0; }
       10%{ opacity: 1; }
       90%{ opacity: 1; }
-      100%{ transform: translateY(calc(-110vh)); opacity: 0; }
+      100%{ transform: translateY(calc(-120vh)); opacity: 0; }
     }
     @keyframes sway{
       0%{ margin-left: 0px; rotate: -2deg; }
-      50%{ margin-left: 18px; rotate: 2deg; }
+      50%{ margin-left: 22px; rotate: 2deg; }
       100%{ margin-left: 0px; rotate: -2deg; }
     }
 
@@ -160,366 +164,3 @@
       border:1px solid rgba(216,177,90,0.28);
       background: rgba(255,255,255,0.03);
       box-shadow: 0 12px 30px rgba(0,0,0,0.35);
-      transform: translateY(10px) scale(0.98);
-      opacity:0;
-    }
-    .photoWrap.show{ display:block; animation: photoIn .55s ease-out forwards; }
-    @keyframes photoIn{ to { transform: translateY(0) scale(1); opacity:1; } }
-
-    .photoWrap img{
-      width:100%;
-      height:auto;
-      max-height:560px;
-      object-fit:contain;
-      display:block;
-      background: rgba(0,0,0,0.18);
-    }
-    .photoCaption{
-      padding:10px 12px;
-      font-size:13px;
-      opacity:0.88;
-      border-top:1px solid rgba(216,177,90,0.18);
-      background: rgba(0,0,0,0.20);
-    }
-
-    .art{ display:flex; justify-content:center; align-items:center; position:relative; }
-    .penguinStage{ position:relative; display:flex; justify-content:center; align-items:center; padding:30px; border-radius:28px; }
-    .penguinStage::before{
-      content:"";
-      position:absolute; inset:0;
-      border-radius:28px;
-      background:
-        radial-gradient(circle at 50% 40%, rgba(255,75,92,0.35), transparent 60%),
-        radial-gradient(circle at 60% 60%, rgba(216,177,90,0.35), transparent 65%),
-        radial-gradient(circle at 40% 70%, rgba(90,220,255,0.25), transparent 65%);
-      filter: blur(18px);
-      opacity:0.9;
-      z-index:0;
-    }
-    .penguinBtn{
-      border:0; background:transparent; padding:0;
-      cursor:pointer;
-      position:relative; z-index:1;
-      transform-origin: 50% 85%;
-      animation: dance 1.2s ease-in-out infinite;
-    }
-    .penguinImg{
-      width:min(360px, 80%);
-      height:auto;
-      display:block;
-      filter: drop-shadow(0 18px 28px rgba(0,0,0,0.45));
-      user-select:none; -webkit-user-drag:none;
-    }
-    @keyframes dance{
-      0%{transform: translateY(6px) rotate(-2deg) scale(1);}
-      25%{transform: translateY(-7px) rotate(2deg) scale(1.02);}
-      50%{transform: translateY(6px) rotate(0deg) scale(1);}
-      75%{transform: translateY(-7px) rotate(-2deg) scale(1.02);}
-      100%{transform: translateY(6px) rotate(-2deg) scale(1);}
-    }
-    .party{ animation: partyDance .75s cubic-bezier(.2,.9,.2,1) 1 !important; }
-    @keyframes partyDance{
-      0%{transform: translateY(6px) rotate(-2deg) scale(1);}
-      35%{transform: translateY(-26px) rotate(10deg) scale(1.07);}
-      65%{transform: translateY(2px) rotate(-12deg) scale(1.04);}
-      100%{transform: translateY(6px) rotate(-2deg) scale(1);}
-    }
-  </style>
-</head>
-
-<body>
-  <!-- 🎀 Ribbons + 🎈 Balloons background -->
-  <canvas id="ribbons"></canvas>
-  <div class="balloons" id="balloons"></div>
-
-  <div class="card">
-    <h1>Happy Birthday, <span class="gold">Ooha</span> 🎂</h1>
-
-    <div class="layout">
-      <div>
-        <div class="message">
-          <span id="typed" class="placeholder">💌 Click “Open Message” to reveal your birthday wish…</span>
-          <span id="cursor" class="cursor"></span>
-        </div>
-
-        <div class="btnRow">
-          <button id="openBtn" class="btn">💌 Open Message</button>
-          <button id="replayBtn" class="btn" style="display:none;">↻ Replay</button>
-          <button id="photoBtn" class="btn">🖼️ Open Photo Surprise</button>
-          <button id="musicBtn" class="btn">🎵 Play Song</button>
-        </div>
-
-        <div id="musicStatus" class="status"></div>
-
-        <div id="photoWrap" class="photoWrap">
-          <img src="./surprise-photo.png" alt="Photo surprise">
-          <div class="photoCaption">✨ A little memory for you, Ooha ✨</div>
-        </div>
-
-        <audio id="bgMusic" preload="auto">
-          <source src="./song.mp3" type="audio/mpeg">
-        </audio>
-      </div>
-
-      <div class="art">
-        <div class="penguinStage">
-          <button class="penguinBtn" id="penguinBtn" aria-label="Dancing 3D penguin">
-            <img class="penguinImg" src="./penguin-3d.png" alt="Cute 3D Penguin">
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // =========================
-    // Typed message
-    // =========================
-    const message = `Happy happy birthday, my kothi fellow 😊
-To one of the most stubborn, driven, and inspiring women I know, your dedication to your dreams is honestly something I admire so much. Stay the same beautiful, hardworking, and strong person you are. Keep chasing your success, because you’re made for amazing things.
-Have a day as special as you are. Meet you soon ❤️`;
-
-    const typed = document.getElementById("typed");
-    const cursor = document.getElementById("cursor");
-    const openBtn = document.getElementById("openBtn");
-    const replayBtn = document.getElementById("replayBtn");
-
-    let timer = null;
-    let isTyping = false;
-
-    function startTyping(){
-      if (isTyping) return;
-      isTyping = true;
-
-      clearInterval(timer);
-      typed.classList.remove("placeholder");
-      typed.textContent = "";
-      cursor.style.display = "inline-block";
-
-      openBtn.style.display = "none";
-      replayBtn.style.display = "inline-block";
-
-      let i = 0;
-      timer = setInterval(() => {
-        typed.textContent += message.charAt(i);
-        i++;
-        if(i >= message.length){
-          clearInterval(timer);
-          cursor.style.display = "none";
-          isTyping = false;
-        }
-      }, 16);
-    }
-
-    function replay(){
-      clearInterval(timer);
-      isTyping = false;
-      startTyping();
-    }
-
-    openBtn.addEventListener("click", startTyping);
-    replayBtn.addEventListener("click", replay);
-
-    // =========================
-    // Photo toggle
-    // =========================
-    const photoBtn = document.getElementById("photoBtn");
-    const photoWrap = document.getElementById("photoWrap");
-    photoBtn.addEventListener("click", () => {
-      const isOpen = photoWrap.classList.toggle("show");
-      photoBtn.textContent = isOpen ? "🙈 Hide Photo Surprise" : "🖼️ Open Photo Surprise";
-    });
-
-    // =========================
-    // Penguin party bounce
-    // =========================
-    const penguinBtn = document.getElementById("penguinBtn");
-    penguinBtn.addEventListener("click", () => {
-      penguinBtn.classList.remove("party");
-      void penguinBtn.offsetWidth;
-      penguinBtn.classList.add("party");
-    });
-
-    // =========================
-    // Music controls
-    // =========================
-    const musicBtn = document.getElementById("musicBtn");
-    const bgMusic = document.getElementById("bgMusic");
-    const musicStatus = document.getElementById("musicStatus");
-    let musicOn = false;
-
-    bgMusic.addEventListener("error", () => {
-      musicStatus.textContent = "⚠️ Audio failed to load. Make sure the file is named exactly: song.mp3 (in repo root).";
-    });
-
-    musicBtn.addEventListener("click", async () => {
-      try {
-        if (!musicOn) {
-          musicStatus.textContent = "Loading song…";
-          bgMusic.volume = 0.55;
-          bgMusic.loop = true;
-          await bgMusic.play();
-          musicOn = true;
-          musicBtn.textContent = "⏸ Pause Song";
-          musicStatus.textContent = "🎶 Playing…";
-        } else {
-          bgMusic.pause();
-          musicOn = false;
-          musicBtn.textContent = "🎵 Play Song";
-          musicStatus.textContent = "Paused.";
-        }
-      } catch (e) {
-        musicStatus.textContent = "⚠️ Couldn’t play. Try hard refresh (Cmd+Shift+R).";
-        console.error(e);
-      }
-    });
-
-    // =========================
-    // 🎈 Floating balloons (background)
-    // =========================
-    (function spawnBalloons(){
-      const wrap = document.getElementById("balloons");
-      const colors = [
-        "rgba(255,75,92,0.85)",   // pink/red
-        "rgba(216,177,90,0.85)",  // gold
-        "rgba(106,215,255,0.85)", // light blue
-        "rgba(255,210,92,0.85)",  // yellow-ish
-        "rgba(180,120,255,0.85)"  // purple-ish
-      ];
-
-      const COUNT = 14;
-      for(let i=0;i<COUNT;i++){
-        const b = document.createElement("div");
-        b.className = "balloon";
-
-        const x = Math.random() * 100;                 // %
-        const size = 44 + Math.random() * 36;          // px
-        const dur = 12 + Math.random() * 10;           // sec
-        const sway = 2.8 + Math.random() * 2.8;        // sec
-        const c = colors[Math.floor(Math.random() * colors.length)];
-
-        b.style.setProperty("--x", x.toFixed(2));
-        b.style.setProperty("--size", size.toFixed(0));
-        b.style.setProperty("--dur", dur.toFixed(2));
-        b.style.setProperty("--sway", sway.toFixed(2));
-        b.style.setProperty("--c", c);
-        b.style.animationDelay = `${(-Math.random() * dur).toFixed(2)}s`;
-
-        const s = document.createElement("div");
-        s.className = "string";
-        b.appendChild(s);
-
-        wrap.appendChild(b);
-      }
-    })();
-
-    // =========================
-    // 🎀 Falling ribbons (background canvas)
-    // =========================
-    (() => {
-      const canvas = document.getElementById("ribbons");
-      const ctx = canvas.getContext("2d");
-
-      const DPR = Math.min(2, window.devicePixelRatio || 1);
-      let W = 0, H = 0;
-
-      function resize() {
-        W = Math.floor(window.innerWidth);
-        H = Math.floor(window.innerHeight);
-        canvas.width = Math.floor(W * DPR);
-        canvas.height = Math.floor(H * DPR);
-        canvas.style.width = W + "px";
-        canvas.style.height = H + "px";
-        ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-      }
-      window.addEventListener("resize", resize);
-      resize();
-
-      const colors = ["#D8B15A", "#FF4B5C", "#6AD7FF", "#F5F0E6"];
-      const ribbons = [];
-      const COUNT = 46;
-
-      function rand(min, max) { return Math.random() * (max - min) + min; }
-
-      function spawnRibbon(y = -60) {
-        const w = rand(6, 14);
-        const h = rand(28, 60);
-        ribbons.push({
-          x: rand(0, W),
-          y,
-          w,
-          h,
-          vy: rand(0.65, 1.75),
-          vx: rand(-0.25, 0.25),
-          rot: rand(0, Math.PI * 2),
-          vr: rand(-0.02, 0.02),
-          sway: rand(0.8, 2.2),
-          phase: rand(0, Math.PI * 2),
-          color: colors[Math.floor(rand(0, colors.length))]
-        });
-      }
-
-      for (let i = 0; i < COUNT; i++) spawnRibbon(rand(-H, H));
-
-      function drawRibbon(r) {
-        ctx.save();
-        ctx.translate(r.x, r.y);
-        ctx.rotate(r.rot);
-
-        ctx.globalAlpha = 0.95;
-        ctx.fillStyle = r.color;
-
-        const rx = r.w / 2;
-        ctx.beginPath();
-        ctx.moveTo(-rx + 2, -r.h / 2);
-        ctx.quadraticCurveTo(-rx, -r.h / 2, -rx, -r.h / 2 + 2);
-        ctx.lineTo(-rx, r.h / 2 - 2);
-        ctx.quadraticCurveTo(-rx, r.h / 2, -rx + 2, r.h / 2);
-        ctx.lineTo(rx - 2, r.h / 2);
-        ctx.quadraticCurveTo(rx, r.h / 2, rx, r.h / 2 - 2);
-        ctx.lineTo(rx, -r.h / 2 + 2);
-        ctx.quadraticCurveTo(rx, -r.h / 2, rx - 2, -r.h / 2);
-        ctx.closePath();
-        ctx.fill();
-
-        ctx.globalAlpha = 0.25;
-        ctx.strokeStyle = "#ffffff";
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(-r.w * 0.15, -r.h / 2 + 4);
-        ctx.lineTo(-r.w * 0.15, r.h / 2 - 4);
-        ctx.stroke();
-
-        ctx.restore();
-      }
-
-      function animate() {
-        ctx.clearRect(0, 0, W, H);
-
-        for (let i = ribbons.length - 1; i >= 0; i--) {
-          const r = ribbons[i];
-          r.phase += 0.02;
-          r.x += r.vx + Math.sin(r.phase) * 0.35 * r.sway;
-          r.y += r.vy;
-          r.rot += r.vr;
-
-          drawRibbon(r);
-
-          if (r.y > H + 80) {
-            ribbons.splice(i, 1);
-            spawnRibbon(-80);
-          } else if (r.x < -80) {
-            r.x = W + 80;
-          } else if (r.x > W + 80) {
-            r.x = -80;
-          }
-        }
-
-        requestAnimationFrame(animate);
-      }
-
-      animate();
-    })();
-  </script>
-</body>
-</html>
