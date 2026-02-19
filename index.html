@@ -32,6 +32,73 @@
       overflow-y:auto;
     }
 
+    /* 🎀 + 🎈 background layers (behind everything) */
+    #ribbons{
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.75;
+    }
+    .balloons{
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      opacity: 0.55;
+    }
+    .balloon{
+      position:absolute;
+      left: calc(var(--x) * 1%);
+      bottom: -140px;
+      width: calc(var(--size) * 1px);
+      height: calc(var(--size) * 1.25px);
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.0) 35%),
+                  var(--c);
+      border-radius: 50% 50% 48% 48%;
+      filter: drop-shadow(0 10px 18px rgba(0,0,0,0.35));
+      transform: translateX(0) rotate(0deg);
+      animation:
+        floatUp calc(var(--dur) * 1s) linear infinite,
+        sway calc(var(--sway) * 1s) ease-in-out infinite;
+    }
+    .balloon::after{
+      content:"";
+      position:absolute;
+      left:50%;
+      bottom:-10px;
+      width:14px;
+      height:12px;
+      background: rgba(0,0,0,0.12);
+      transform: translateX(-50%) rotate(45deg);
+      border-radius: 3px;
+      opacity: 0.35;
+    }
+    .string{
+      position:absolute;
+      left:50%;
+      top:100%;
+      width:2px;
+      height:110px;
+      background: rgba(245,240,230,0.35);
+      transform: translateX(-50%);
+      border-radius: 999px;
+    }
+    @keyframes floatUp{
+      0%{ transform: translateY(0); opacity: 0; }
+      10%{ opacity: 1; }
+      90%{ opacity: 1; }
+      100%{ transform: translateY(calc(-110vh)); opacity: 0; }
+    }
+    @keyframes sway{
+      0%{ margin-left: 0px; rotate: -2deg; }
+      50%{ margin-left: 18px; rotate: 2deg; }
+      100%{ margin-left: 0px; rotate: -2deg; }
+    }
+
     .card{
       width:min(980px, 96vw);
       padding:38px;
@@ -40,6 +107,8 @@
       border:1px solid rgba(216,177,90,0.30);
       box-shadow: 0 25px 70px rgba(0,0,0,0.60);
       backdrop-filter: blur(10px);
+      position: relative;
+      z-index: 1; /* above ribbons/balloons */
     }
 
     h1{ margin:0 0 18px; font-size:clamp(30px, 4.2vw, 46px); text-align:center; }
@@ -159,6 +228,10 @@
 </head>
 
 <body>
+  <!-- 🎀 Ribbons + 🎈 Balloons background -->
+  <canvas id="ribbons"></canvas>
+  <div class="balloons" id="balloons"></div>
+
   <div class="card">
     <h1>Happy Birthday, <span class="gold">Ooha</span> 🎂</h1>
 
@@ -183,7 +256,6 @@
           <div class="photoCaption">✨ A little memory for you, Ooha ✨</div>
         </div>
 
-        <!-- ✅ MP3 MUST be named: song.mp3 -->
         <audio id="bgMusic" preload="auto">
           <source src="./song.mp3" type="audio/mpeg">
         </audio>
@@ -200,6 +272,9 @@
   </div>
 
   <script>
+    // =========================
+    // Typed message
+    // =========================
     const message = `Happy happy birthday, my kothi fellow 😊
 To one of the most stubborn, driven, and inspiring women I know, your dedication to your dreams is honestly something I admire so much. Stay the same beautiful, hardworking, and strong person you are. Keep chasing your success, because you’re made for amazing things.
 Have a day as special as you are. Meet you soon ❤️`;
@@ -245,6 +320,9 @@ Have a day as special as you are. Meet you soon ❤️`;
     openBtn.addEventListener("click", startTyping);
     replayBtn.addEventListener("click", replay);
 
+    // =========================
+    // Photo toggle
+    // =========================
     const photoBtn = document.getElementById("photoBtn");
     const photoWrap = document.getElementById("photoWrap");
     photoBtn.addEventListener("click", () => {
@@ -252,6 +330,9 @@ Have a day as special as you are. Meet you soon ❤️`;
       photoBtn.textContent = isOpen ? "🙈 Hide Photo Surprise" : "🖼️ Open Photo Surprise";
     });
 
+    // =========================
+    // Penguin party bounce
+    // =========================
     const penguinBtn = document.getElementById("penguinBtn");
     penguinBtn.addEventListener("click", () => {
       penguinBtn.classList.remove("party");
@@ -259,6 +340,9 @@ Have a day as special as you are. Meet you soon ❤️`;
       penguinBtn.classList.add("party");
     });
 
+    // =========================
+    // Music controls
+    // =========================
     const musicBtn = document.getElementById("musicBtn");
     const bgMusic = document.getElementById("bgMusic");
     const musicStatus = document.getElementById("musicStatus");
@@ -285,10 +369,157 @@ Have a day as special as you are. Meet you soon ❤️`;
           musicStatus.textContent = "Paused.";
         }
       } catch (e) {
-        musicStatus.textContent = "⚠️ Couldn’t play. Try hard refresh (Cmd+Shift+R) after you rename to song.mp3.";
+        musicStatus.textContent = "⚠️ Couldn’t play. Try hard refresh (Cmd+Shift+R).";
         console.error(e);
       }
     });
+
+    // =========================
+    // 🎈 Floating balloons (background)
+    // =========================
+    (function spawnBalloons(){
+      const wrap = document.getElementById("balloons");
+      const colors = [
+        "rgba(255,75,92,0.85)",   // pink/red
+        "rgba(216,177,90,0.85)",  // gold
+        "rgba(106,215,255,0.85)", // light blue
+        "rgba(255,210,92,0.85)",  // yellow-ish
+        "rgba(180,120,255,0.85)"  // purple-ish
+      ];
+
+      const COUNT = 14;
+      for(let i=0;i<COUNT;i++){
+        const b = document.createElement("div");
+        b.className = "balloon";
+
+        const x = Math.random() * 100;                 // %
+        const size = 44 + Math.random() * 36;          // px
+        const dur = 12 + Math.random() * 10;           // sec
+        const sway = 2.8 + Math.random() * 2.8;        // sec
+        const c = colors[Math.floor(Math.random() * colors.length)];
+
+        b.style.setProperty("--x", x.toFixed(2));
+        b.style.setProperty("--size", size.toFixed(0));
+        b.style.setProperty("--dur", dur.toFixed(2));
+        b.style.setProperty("--sway", sway.toFixed(2));
+        b.style.setProperty("--c", c);
+        b.style.animationDelay = `${(-Math.random() * dur).toFixed(2)}s`;
+
+        const s = document.createElement("div");
+        s.className = "string";
+        b.appendChild(s);
+
+        wrap.appendChild(b);
+      }
+    })();
+
+    // =========================
+    // 🎀 Falling ribbons (background canvas)
+    // =========================
+    (() => {
+      const canvas = document.getElementById("ribbons");
+      const ctx = canvas.getContext("2d");
+
+      const DPR = Math.min(2, window.devicePixelRatio || 1);
+      let W = 0, H = 0;
+
+      function resize() {
+        W = Math.floor(window.innerWidth);
+        H = Math.floor(window.innerHeight);
+        canvas.width = Math.floor(W * DPR);
+        canvas.height = Math.floor(H * DPR);
+        canvas.style.width = W + "px";
+        canvas.style.height = H + "px";
+        ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      }
+      window.addEventListener("resize", resize);
+      resize();
+
+      const colors = ["#D8B15A", "#FF4B5C", "#6AD7FF", "#F5F0E6"];
+      const ribbons = [];
+      const COUNT = 46;
+
+      function rand(min, max) { return Math.random() * (max - min) + min; }
+
+      function spawnRibbon(y = -60) {
+        const w = rand(6, 14);
+        const h = rand(28, 60);
+        ribbons.push({
+          x: rand(0, W),
+          y,
+          w,
+          h,
+          vy: rand(0.65, 1.75),
+          vx: rand(-0.25, 0.25),
+          rot: rand(0, Math.PI * 2),
+          vr: rand(-0.02, 0.02),
+          sway: rand(0.8, 2.2),
+          phase: rand(0, Math.PI * 2),
+          color: colors[Math.floor(rand(0, colors.length))]
+        });
+      }
+
+      for (let i = 0; i < COUNT; i++) spawnRibbon(rand(-H, H));
+
+      function drawRibbon(r) {
+        ctx.save();
+        ctx.translate(r.x, r.y);
+        ctx.rotate(r.rot);
+
+        ctx.globalAlpha = 0.95;
+        ctx.fillStyle = r.color;
+
+        const rx = r.w / 2;
+        ctx.beginPath();
+        ctx.moveTo(-rx + 2, -r.h / 2);
+        ctx.quadraticCurveTo(-rx, -r.h / 2, -rx, -r.h / 2 + 2);
+        ctx.lineTo(-rx, r.h / 2 - 2);
+        ctx.quadraticCurveTo(-rx, r.h / 2, -rx + 2, r.h / 2);
+        ctx.lineTo(rx - 2, r.h / 2);
+        ctx.quadraticCurveTo(rx, r.h / 2, rx, r.h / 2 - 2);
+        ctx.lineTo(rx, -r.h / 2 + 2);
+        ctx.quadraticCurveTo(rx, -r.h / 2, rx - 2, -r.h / 2);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.globalAlpha = 0.25;
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(-r.w * 0.15, -r.h / 2 + 4);
+        ctx.lineTo(-r.w * 0.15, r.h / 2 - 4);
+        ctx.stroke();
+
+        ctx.restore();
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, W, H);
+
+        for (let i = ribbons.length - 1; i >= 0; i--) {
+          const r = ribbons[i];
+          r.phase += 0.02;
+          r.x += r.vx + Math.sin(r.phase) * 0.35 * r.sway;
+          r.y += r.vy;
+          r.rot += r.vr;
+
+          drawRibbon(r);
+
+          if (r.y > H + 80) {
+            ribbons.splice(i, 1);
+            spawnRibbon(-80);
+          } else if (r.x < -80) {
+            r.x = W + 80;
+          } else if (r.x > W + 80) {
+            r.x = -80;
+          }
+        }
+
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+    })();
   </script>
 </body>
 </html>
