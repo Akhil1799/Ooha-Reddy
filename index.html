@@ -21,7 +21,7 @@
       min-height:100vh;
       display:flex;
       justify-content:center;
-      align-items:flex-start; /* allow content to grow downward */
+      align-items:flex-start;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
       background:
         radial-gradient(1200px 800px at 50% 25%, rgba(216,177,90,0.14), transparent 55%),
@@ -30,7 +30,6 @@
       color:var(--cream);
       padding:22px;
 
-      /* ✅ FIX: allow vertical scrolling */
       overflow-x:hidden;
       overflow-y:auto;
     }
@@ -104,7 +103,6 @@
       font-weight:800;
     }
 
-    /* Photo surprise box */
     .photoWrap{
       margin-top:14px;
       display:none;
@@ -126,7 +124,6 @@
       to { transform: translateY(0) scale(1); opacity:1; }
     }
 
-    /* ✅ Image size tuned so it fits nicely and still scrolls if needed */
     .photoWrap img{
       width:100%;
       height:auto;
@@ -144,7 +141,6 @@
       background: rgba(0,0,0,0.20);
     }
 
-    /* Penguin right side */
     .art{
       display:flex;
       justify-content:center;
@@ -230,12 +226,21 @@
           <button id="openBtn" class="btn">💌 Open Message</button>
           <button id="replayBtn" class="btn" style="display:none;">↻ Replay</button>
           <button id="photoBtn" class="btn">🖼️ Open Photo Surprise</button>
+
+          <!-- ✅ Music -->
+          <button id="musicBtn" class="btn">🎵 Play Song</button>
         </div>
 
         <div id="photoWrap" class="photoWrap">
           <img src="./surprise-photo.png" alt="Photo surprise">
           <div class="photoCaption">✨ A little memory for you, Ooha ✨</div>
         </div>
+
+        <!-- ✅ IMPORTANT: file name must match exactly -->
+        <audio id="bgMusic" preload="auto">
+          <source src="./Birthday-Song.mp3" type="audio/mpeg">
+          Your browser does not support audio.
+        </audio>
       </div>
 
       <div class="art">
@@ -294,19 +299,44 @@ Have a day as special as you are. Meet you soon ❤️`;
     openBtn.addEventListener("click", startTyping);
     replayBtn.addEventListener("click", replay);
 
+    // Photo toggle
     const photoBtn = document.getElementById("photoBtn");
     const photoWrap = document.getElementById("photoWrap");
-
     photoBtn.addEventListener("click", () => {
       const isOpen = photoWrap.classList.toggle("show");
       photoBtn.textContent = isOpen ? "🙈 Hide Photo Surprise" : "🖼️ Open Photo Surprise";
     });
 
+    // Penguin click: extra dance
     const penguinBtn = document.getElementById("penguinBtn");
     penguinBtn.addEventListener("click", () => {
       penguinBtn.classList.remove("party");
       void penguinBtn.offsetWidth;
       penguinBtn.classList.add("party");
+    });
+
+    // ✅ Music play/pause (must be user click)
+    const musicBtn = document.getElementById("musicBtn");
+    const bgMusic = document.getElementById("bgMusic");
+    let musicOn = false;
+
+    musicBtn.addEventListener("click", async () => {
+      try {
+        if (!musicOn) {
+          bgMusic.volume = 0.55;   // soft
+          bgMusic.loop = true;
+          await bgMusic.play();
+          musicOn = true;
+          musicBtn.textContent = "⏸ Pause Song";
+        } else {
+          bgMusic.pause();
+          musicOn = false;
+          musicBtn.textContent = "🎵 Play Song";
+        }
+      } catch (e) {
+        alert("Song couldn’t play. Make sure the file is named exactly: Birthday-Song.mp3 and is in the repo root.");
+        console.error(e);
+      }
     });
   </script>
 </body>
